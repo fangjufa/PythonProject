@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>bb3e65e5-2f69-4722-a867-3f7c44448cdd</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>PythonProject.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>PythonProject</Name>
+    <RootNamespace>PythonProject</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="build_image_data.py" />
+    <Compile Include="CIFAR_test.py" />
+    <Compile Include="ConvolutionalNetwork.py" />
+    <Compile Include="convolution_test.py" />
+    <Compile Include="read_images.py" />
+    <Compile Include="exponential_test.py" />
+    <Compile Include="get_minimize_point.py" />
+    <Compile Include="KNearst.py" />
+    <Compile Include="LinearClassfiy.py" />
+    <Compile Include="load_jpeg_with_tensorflow.py" />
+    <Compile Include="lossfunction.py" />
+    <Compile Include="MatplotFigures\figure_01.py" />
+    <Compile Include="MatplotFigures\figure_02.py" />
+    <Compile Include="MatplotFigures\figure_03.py" />
+    <Compile Include="MatplotFigures\figure_03_multy plots.py" />
+    <Compile Include="MatplotFigures\figure_04_3D Plot.py" />
+    <Compile Include="MatplotFigures\figure_04_grid.py" />
+    <Compile Include="MatplotFigures\figure_05_twinaxes.py" />
+    <Compile Include="MatplotFigures\figure_06_scatter bar histogram.py" />
+    <Compile Include="MatplotFigures\figure_07_3Dplot.py" />
+    <Compile Include="MatplotFigures\figure_08_contour projection.py" />
+    <Compile Include="MinimizeSpeed.py" />
+    <Compile Include="mnist_deep.py" />
+    <Compile Include="mnist_example.py" />
+    <Compile Include="mnist_input_data.py" />
+    <Compile Include="mnist_LinearClassify.py" />
+    <Compile Include="movie.py" />
+    <Compile Include="Nearest.py" />
+    <Compile Include="object_detect.py" />
+    <Compile Include="PythonProject.py" />
+    <Compile Include="python_array.py" />
+    <Compile Include="read_mnistdata.py" />
+    <Compile Include="ReshapeTest.py" />
+    <Compile Include="save_model.py" />
+    <Compile Include="show_pic.py" />
+    <Compile Include="show_pic_tensorflow matplot.py" />
+    <Compile Include="SnippetsOfStanfordVideo.py" />
+    <Compile Include="softmax_regression.py" />
+    <Compile Include="tensorboard_test.py" />
+    <Compile Include="tensorflow learning.py" />
+    <Compile Include="TensorFlowLearn.py" />
+    <Compile Include="tensorflow_matplot_maxpooling.py" />
+    <Compile Include="tensorflow_opencv.py" />
+    <Compile Include="TestAnimation.py" />
+    <Compile Include="TestTensorboard.py" />
+    <Compile Include="test_function.py" />
+    <Compile Include="tfrecord_test.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MatplotFigures\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
+  <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
