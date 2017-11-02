@@ -240,3 +240,16 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+*.pyc
+PythonProject/PythonProject/Images/cifar-10-batches-py/data_batch_1
+*.jpg
+*.pyproj
+*.pyproj
+PythonProject/PythonProject/PythonProject.pyproj
+*.gz
+PythonProject/PythonProject/Images/cifar-10-batches-py/test_batch
+PythonProject/PythonProject/Images/cifar-10-batches-py/readme.html
+PythonProject/PythonProject/Images/cifar-10-batches-py/data_batch_5
+PythonProject/PythonProject/Images/cifar-10-batches-py/data_batch_4
+PythonProject/PythonProject/Images/cifar-10-batches-py/data_batch_3
+PythonProject/PythonProject/Images/cifar-10-batches-py/data_batch_2

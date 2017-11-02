@@ -98,11 +98,11 @@ class Convolution(object):
                 for k in range(channel):
                     #[temp[k],self.grad_input[i][k],self.grad_conv[j][k]] = self.conv_simple(data[k],kernel[k])
                     [grad_input[i][k],grad_conv[j][k]] = self.conv_simple(data[k],kernel[k],backgrad[i][j])
-                result[i][j] = np.sum(temp,axis = 0)
+                #result[i][j] = np.sum(temp,axis = 0)
 
         return [grad_input,grad_conv]
 
-    def backward_simple(self):
+    def backward_simple(self,backgrad):
         if not x.ndim == 2 or not kernel.ndim == 2:
             print("Dimension of x and kernel must be 2.")
             return False
@@ -115,7 +115,7 @@ class Convolution(object):
         grad_kernel = np.zeros(kernel.shape)
         grad_x = np.zeros(x.shape)
         #if padding == "valid":
-        result = np.zeros([xw-kw + 1,xh-kh +1])
+        #result = np.zeros([xw-kw + 1,xh-kh +1])
         #else:
         #    result = np.zeros([xw,xh])
     
@@ -126,9 +126,9 @@ class Convolution(object):
                 if j+kh > xh:
                     continue
                 grad_kernel += x[i:kw + i,j:kh + j]*backgrad[i][j]
-                grad_x[i:kw+i,j:kh+j] += kernel
-                result[i][j] = np.sum(np.multiply(x[i:kw+i,j:kh+j],kernel))
-        return [grad_input,grad_conv]
+                grad_x[i:kw+i,j:kh+j] += kernel*backgrad[i][j]
+                #result[i][j] = np.sum(np.multiply(x[i:kw+i,j:kh+j],kernel))
+        return [grad_x,grad_kernel]
 
 
 class Maxpool(object):
@@ -327,9 +327,10 @@ class ReLU(object):
     #print("Tensorflow grad_c:",result_c)
     #print("Tensorflow grad_d:",result_d)
 
-W = np.random.normal(size = [1,1,4,4])
+input = np.random.normal(size = [1,1,4,4])
+W = np.random.normal(size = [1,1,2,2])
 
-W1 = Maxpool(W,[2,2]).forward()
+W1 = Convolution(input,W).forward()
 
 W2 = W1 * 4
 W3 = np.multiply( W2,W2)
@@ -337,16 +338,16 @@ W3 = np.multiply( W2,W2)
 dW2 = 2*W2
 dW1 = 4*dW2
 
-dW = Maxpool(W,[2,2]).backward(dW1)
+dW = Convolution(input,W).backward(dW1)
 
 print("Numpy:",dW)
 
 
 import tensorflow as tf
-
+tfInput = tf.Variable(input)
 tfW = tf.Variable(W)
 tfW = tf.reshape(tfW,shape = [1,4,4,1])
-tfRe = tf.nn.max_pool(tfW,[1,2,2,1],[1,2,2,1],padding="VALID")
+tfRe = tf.nn.conv2d(tfW,[1,2,2,1],[1,2,2,1],padding="VALID")
 tfResult = (tfRe*4)**2
 
 grad = tf.gradients(tfResult,tfW)
