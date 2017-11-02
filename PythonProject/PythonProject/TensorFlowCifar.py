@@ -1,4 +1,40 @@
 import tensorflow as tf
+import read_images as ri
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+
+cifarfile = "Images/cifar-10-batches-py/"
+cifar_dic = ri.unpickle(cifarfile)
+input = cifar_dic[b"data"]
+labels = cifar_dic[b"labels"]
+#num = input.shape[0]
+
+def Weight_Initial(shape):
+    weight = tf.truncated_normal(shape=shape)
+    return tf.Variable(weight)
+
+#first convolution
+#[]
+input = tf.Variable(input)
+W1 = Weight_Initial([5,5,3,32])
+conv1 = tf.nn.conv2d(input,W1,[1,1,1,1],padding = "VALID")
+
+relu1 = tf.nn.relu(conv1)
+maxpool1 = tf.nn.max_pool(relu1,[1,2,2,1],[1,2,2,1],padding="VALID")
+
+#second convolution
+W2 = Weight_Initial([5,5,32,64])
+conv2 = tf.nn.conv2d(maxpool1,W2,[1,1,1,1],"VALID")
+relu2 = tf.nn.relu(conv2)
+maxpool2 = tf.nn.max_pool(relu2,[1,2,2,1],[1,2,2,1],"VALID")
+
+#full connected layer
+W3 = Weight_Initial([10,1024])
+
+
+
+
+
 #定义一个两行三列的矩阵
 matrix1 = tf.constant([[2,1,3],[5,2,4]])
 
