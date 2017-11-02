@@ -22,6 +22,7 @@ class LossFuntion(object):
         """Weston watkins ways to calculate loss and gradients. """
         gradientW = np.zeros(W.shape)
         gradientb = np.zeros(b.size)
+        gradientx = np.zeros(x.shape)
         s = self.compute_score(W,x,b)
         loss = 0
 
@@ -38,7 +39,8 @@ class LossFuntion(object):
                 gradientb[k] += 1
                 gradientW[lbli] -= x
                 gradientb[lbli] -= 1
-        return gradientW,gradientb,loss
+                gradientx += (W[k] - W[lbli])
+        return gradientx,gradientW,gradientb,loss
 
     def SoftMax(self,W,b,x,lbli):
         """sotfmax ways to calculate loss and gradients"""

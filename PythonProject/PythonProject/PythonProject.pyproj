@@ -56,6 +56,7 @@
     <Compile Include="read_mnistdata.py" />
     <Compile Include="ReshapeTest.py" />
     <Compile Include="save_model.py" />
+    <Compile Include="SelfConvTest.py" />
     <Compile Include="show_pic.py" />
     <Compile Include="show_pic_tensorflow matplot.py" />
     <Compile Include="SnippetsOfStanfordVideo.py" />
@@ -66,6 +67,9 @@
     <Compile Include="tensorflow_matplot_maxpooling.py" />
     <Compile Include="tensorflow_opencv.py" />
     <Compile Include="TestAnimation.py" />
+    <Compile Include="Testbackpropagation.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TestTensorboard.py" />
     <Compile Include="test_function.py" />
     <Compile Include="tfrecord_test.py" />

@@ -1,5 +1,6 @@
 import numpy as np
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 class Convolution(object):
     """convolution layer.default padding is valid,and stride is all 1."""
@@ -21,10 +22,8 @@ class Convolution(object):
 
         self.input = input
         self.conv = conv
-        self.grad_input = np.zeros(input.shape)
-        self.grad_conv = np.zeros(conv.shape)
 
-    def forward(self):
+    def forward(self,backgrad):
         """Convolution operation.Output size is [x.shape[0],conv.shape[0],x.shape[2]-conv.shape[2] + 1,x.shape[3]-conv.shape[3]+1]"""
         x = self.input
         conv = self.conv
@@ -38,21 +37,72 @@ class Convolution(object):
         for i in range(data_num):
             #extract ith data
             data = x[i,:]
+            print("i = ",i)
             for j in range(depth):
                 kernel = conv[j,:]
                 channel = data.shape[0]
                 temp = np.zeros([channel,W,H])
                 for k in range(channel):
-                    [temp[k],self.grad_input[i][k],self.grad_conv[j][k]] = self.conv_simple(data[k],kernel[k])
-                    #conv_result = conv_result = self.conv_simple(data[k],kernel[k])
-                    #temp[k] = conv_result[0]
-                    #self.grad_input[i][j] = conv_result[1]
-                    #self.grad_conv[k] = conv_result[2]
+                    temp[k] = self.conv_simple(data[k],kernel[k])
                 result[i][j] = np.sum(temp,axis = 0)
         return result
 
     def conv_simple(self,x,kernel):
         """A simple one of performing convolution,that x and kernel is a 2D array"""
+        if not x.ndim == 2 or not kernel.ndim == 2:
+            print("Dimension of x and kernel must be 2.")
+            return False
+        xw = x.shape[0]
+        xh = x.shape[1]
+
+        kw = kernel.shape[0]
+        kh = kernel.shape[1]
+        #if padding == "valid":
+        result = np.zeros([xw-kw + 1,xh-kh +1])
+        #else:
+        #    result = np.zeros([xw,xh])
+    
+        for i in range(xw):
+            if i + kw > xw:
+                break
+            for j in range(xh):
+                if j+kh > xh:
+                    continue
+                result[i][j] = np.sum(np.multiply(x[i:kw+i,j:kh+j],kernel))
+                
+
+        return result
+
+    def backward(self,backgrad):
+        """backpropagation of convolutional operation,it will output two arrays,which is dq/dw and dq/dx"""
+        #self.forward()
+        x = self.input
+        conv = self.conv
+        data_num = x.shape[0]
+        #output depth.
+        depth = conv.shape[0]
+        W = x.shape[2]-conv.shape[2] + 1
+        H = x.shape[3]-conv.shape[3]+1
+        #result = np.zeros([data_num,depth,W,H])
+        grad_input = np.zeros(x.shape)
+        grad_conv = np.zeros(conv.shape)
+        #data number
+        for i in range(data_num):
+            #extract ith data
+            data = x[i,:]
+            print("i = ",i)
+            for j in range(depth):
+                kernel = conv[j,:]
+                channel = data.shape[0]
+                #temp = np.zeros([channel,W,H])
+                for k in range(channel):
+                    #[temp[k],self.grad_input[i][k],self.grad_conv[j][k]] = self.conv_simple(data[k],kernel[k])
+                    [grad_input[i][k],grad_conv[j][k]] = self.conv_simple(data[k],kernel[k],backgrad[i][j])
+                result[i][j] = np.sum(temp,axis = 0)
+
+        return [grad_input,grad_conv]
+
+    def backward_simple(self):
         if not x.ndim == 2 or not kernel.ndim == 2:
             print("Dimension of x and kernel must be 2.")
             return False
@@ -75,27 +125,9 @@ class Convolution(object):
             for j in range(xh):
                 if j+kh > xh:
                     continue
-                grad_kernel += x[i:kw + i,j:kh + j]
+                grad_kernel += x[i:kw + i,j:kh + j]*backgrad[i][j]
                 grad_x[i:kw+i,j:kh+j] += kernel
                 result[i][j] = np.sum(np.multiply(x[i:kw+i,j:kh+j],kernel))
-                
-
-        return [result,grad_x,grad_kernel]
-
-    def backward(self):
-        """backpropagation of convolutional operation,it will output two arrays,which is dq/dw and dq/dx"""
-        self.forward()
-        return [self.grad_input,self.grad_conv]
-        #grad_in = np.zeros(self.input.shape)
-        #grad_conv = np.zeros(self.conv.shape)
-
-    def backward_simple(self):
-        """先一步步来，input和conv都是简单的二维数组，没有深度."""
-        #grad_in = np.zeros(self.input.shape)
-        #grad_conv = np.zeros(self.conv.shape)
-
-        #[output,grad_in,grad_conv] = self.conv_simple(input,conv)
-        self.forward()
         return [grad_input,grad_conv]
 
 
@@ -124,9 +156,9 @@ class Maxpool(object):
         
     def maxpool_simple(self,x,kernel):
         """Simple maxpool,that dimensions of x and kernel is just 2."""
-        if not x.ndim == 2 or not kernel.ndim == 1:
-            print("Simple max_pool,dimensions of x and kernel must be 2.")
-            return False
+        #if not x.ndim == 2 or not kernel.ndim == 1:
+        #    print("Simple max_pool,dimensions of x and kernel must be 2.")
+        #    return False
         xw = x.shape[0]
         xh = x.shape[1]
         kw = kernel[0]
@@ -138,28 +170,27 @@ class Maxpool(object):
         for i in range(w):
             for j in range(h):
                 result[i][j] = np.max(x[i*kw:(i+1)*kw,j*kh:(j+1)*kh])
+                #dx[i*kw:(i+1)*kw,j*kh:(j+1)*kh] += dre[i][j] * 
                 
-
         return result
 
-    def backprop_simple(self,x,kernel):
+    def backprop_simple(self,x,kernel,backgrad):
         xw = x.shape[0]
         xh = x.shape[1]
         kw = kernel[0]
         kh = kernel[1]
+        w = int(xw/kw)
+        h = int(xh/kh)
 
         result = np.zeros([xw,xh])
 
-        for i in range(xw):
-            if i%kw == 0:
-                w = i
-            for j in range(xh):
-                if j%kh == 0:
-                    h = j
-                if x[i][j] == np.max(x[w:w+kw,h:h + kh]):
-                    result[i][j] = 1
-                else:
-                    result[i][j] = 0
+        for i in range(w):
+            for j in range(h):
+                temp = np.zeros(x[i*kw:(i+1)*kw,j*kh:(j+1)*kh].shape)
+                maxindex = np.argmax(x[i*kw:(i+1)*kw,j*kh:(j+1)*kh])
+                
+                temp[int(maxindex/kw)][maxindex%kh] = 1
+                result[i*kw:(i+1)*kw,j*kh:(j+1)*kh] += backgrad[i][j] * temp
         return result
 
     def forward(self):
@@ -181,10 +212,10 @@ class Maxpool(object):
         for i in range(data_num):
             data = x[i,:]
             for j in range(channel):
-                result[i][j] = maxpool_simple(data[j],kernel)
+                result[i][j] = self.maxpool_simple(data[j],kernel)
         return result
 
-    def backward(self):
+    def backward(self,backgrad):
         """maxpool backpropagation."""
         x = self.input
         kernel = self.kernel
@@ -199,7 +230,7 @@ class Maxpool(object):
         for i in range(data_num):
             data = x[i,:]
             for j in range(channel):
-                output[i][j] = self.backprop_simple(data[j],kernel)
+                output[i][j] = self.backprop_simple(data[j],kernel,backgrad[i][j])
         return output
 
 
@@ -213,11 +244,12 @@ class ReLU(object):
         self.output[self.output < 0] = 0
         return self.output
 
-    def backward(self):
+    def backward(self,backgrad):
         """ReLU backpropagation.If x > 0,then f(x) = x,f'(x) = 1.otherwise f'(x) = 0."""
         back = np.copy(self.output)
         back[back > 0] = 1
         back[back < 0] = 0
+        back = back*backgrad
         return back
     
 #arr_a = np.array([[[[1,2,4],[2,4,3],[5,5,2]],[[1,1,2],[2,5,4],[3,2,6]],[[6,5,2],[1,2,2],[3,2,4]]]])
@@ -294,3 +326,31 @@ class ReLU(object):
 
     #print("Tensorflow grad_c:",result_c)
     #print("Tensorflow grad_d:",result_d)
+
+W = np.random.normal(size = [1,1,4,4])
+
+W1 = Maxpool(W,[2,2]).forward()
+
+W2 = W1 * 4
+W3 = np.multiply( W2,W2)
+
+dW2 = 2*W2
+dW1 = 4*dW2
+
+dW = Maxpool(W,[2,2]).backward(dW1)
+
+print("Numpy:",dW)
+
+
+import tensorflow as tf
+
+tfW = tf.Variable(W)
+tfW = tf.reshape(tfW,shape = [1,4,4,1])
+tfRe = tf.nn.max_pool(tfW,[1,2,2,1],[1,2,2,1],padding="VALID")
+tfResult = (tfRe*4)**2
+
+grad = tf.gradients(tfResult,tfW)
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    g_re = sess.run(grad)
+    print("Tensorflow:",g_re)
