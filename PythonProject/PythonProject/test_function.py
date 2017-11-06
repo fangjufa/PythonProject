@@ -327,12 +327,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 '''end'''
 
 '''test convolutional neural network'''
-import ConvolutionalNetwork as cn
+#import ConvolutionalNetwork as cn
 
-arr_a = np.random.rand(4,4)
-arr_b = cn.Maxpool(arr_a,np.array([2,2])).backward()
-print(arr_a)
-print(arr_b)
+#arr_a = np.random.rand(4,4)
+#arr_b = cn.Maxpool(arr_a,np.array([2,2])).backward()
+#print(arr_a)
+#print(arr_b)
 
 '''end'''
 
@@ -347,3 +347,40 @@ print(arr_b)
 '''输出结果为[0,0,2]  [0,0,2] 可知如果是等号赋值的话，你改变其中一个数组，另外一个数组也会被改变'''
 
 '''end'''
+
+#lbls = np.array([1,2,0,4,3])
+#input = np.random.normal(size=[6,5])
+#print(input)
+##输出lbls列，有5个数，输出5列。对应的行也是一样。
+#print(input[:,lbls])
+##输出5行，每个行的索引是lbls里面的数。
+#print(input[lbls])
+
+#import tensorflow as tf
+
+#input = tf.truncated_normal([4,2])
+#sm = tf.nn.softmax(input)
+
+#with tf.Session() as sess:
+#    ip = sess.run(input)
+#    print(ip)
+#    result = sess.run(sm,feed_dict={input : ip})
+#    print(result)
+
+#input = tf.truncated_normal([3,4])
+#re = tf.argmax(input,1)
+#add = tf.multiply(input,0.1)
+
+
+#with tf.Session() as sess:
+#    inp = sess.run(input)
+#    print(inp)
+#    #result = sess.run(re,feed_dict={input:inp})
+#    #print(result)
+#    print(sess.run(add,feed_dict={input:inp}))
+
+a = 1
+b = "hello"
+print("hello %a"%a)#这里其实%s、%d、%f、%c都可以。只是不同的字符对应不同的输出，分别对应str,double,float,character.
+print(b+" World")
+print(b+ (str)(a))

@@ -33,10 +33,11 @@ def unpickle(file):
     with open(file,'rb') as fo:
         dict = pkl.load(fo,encoding = 'bytes')
     return dict
-'''call method
-dict = unpickle("cifar 10/batches/data_batch_1")
-data = dict[b"data"]
-labels = dict[b"labels"]
-num = data.shape[0]
-data = data.reshape(num,3,32,32)
-'''
+#'''call method
+#dict = unpickle("Images/cifar-10-batches-py/data_batch_1")
+#[10000,3072]
+#data = dict[b"data"]
+#labels = dict[b"labels"]
+#num = data.shape[0]
+#data = data.reshape(num,3,32,32)
+#'''
