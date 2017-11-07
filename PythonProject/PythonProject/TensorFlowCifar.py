@@ -5,6 +5,7 @@ import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
+
 def ReadDatasets(file):
     #train_cifarfile = "Images/cifar-10-batches-py/data_batch_"
     #for i in range(5):
