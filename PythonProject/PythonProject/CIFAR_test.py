@@ -19,7 +19,7 @@ def bias_variable(shape):
 #从网站上读取mnist数据集，并将其存储到相对目录下mnist_train文件夹下。如果已经下载了就不会再下载。
 #这个数据集是.gz的压缩文件，这个函数会自动将其解压缩，并将其分成train合test两部分。
 #可以通过mnist.train和mnist.test的方式引用到训练集和测试集。
-mnist = input_data.read_data_sets("mnist_train/",one_hot = True)
+mnist = input_data.read_data_sets("Images/mnist",one_hot = True)
 #image_cv = mnist.train.next_batch(1)[0][0]
 #image_a = tf.reshape(image_cv,[28,28,1])
 ##print(mnist.train.next_batch(50)[0][0].shape)
@@ -30,13 +30,6 @@ mnist = input_data.read_data_sets("mnist_train/",one_hot = True)
 #其实这里无所谓列向量或者行向量，但是一般python或者tensorflow都是列向量为主。
 #784 = 28x28
 x = tf.placeholder(tf.float32,[None,784])
-
-#权重
-W = tf.Variable(tf.zeros([784,10]))
-#偏置量
-b = tf.Variable(tf.zeros([10]))
-
-
 
 '''第一层卷积'''
 #卷积在每个5x5的patch中算出32个特征。
@@ -99,17 +92,18 @@ cross_entropy = -tf.reduce_sum(y_*tf.log(y))
 train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 
 
+
 init = tf.global_variables_initializer()
 
-correct_prediction = tf.equal(tf.arg_max(y,1),tf.arg_max(y_,1))
+correct_prediction = tf.equal(tf.argmax(y,1),tf.argmax(y_,1))
 
 accuracy = tf.reduce_mean(tf.cast(correct_prediction,"float"))
 
 with tf.Session() as sess:
 #sess = tf.Session()
     sess.run(init)
-
-    for i in range(2000):
+    b_val = sess.run(b_conv1)
+    for i in range(1100):
         batch = mnist.train.next_batch(50)
         if i%100 == 0:
         
@@ -117,6 +111,7 @@ with tf.Session() as sess:
             #print(batch[0].shape)
             #print(sess.run(h_fc1_drop,feed_dict={x:batch[0],keep_prob:1.0}))
             print("step %d,train accuracy %f"%(i,train_accuracy))
+            print(b_val)
         sess.run(train_step,feed_dict = {x:batch[0],y_:batch[1],keep_prob:0.5})
 
     print( "test accuracy %g",sess.run(accuracy,feed_dict={

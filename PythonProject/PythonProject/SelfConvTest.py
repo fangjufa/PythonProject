@@ -94,8 +94,3 @@ W3 = weight_initial([10,1024])
 input = max_pool2.reshape(5000,1024)
 [grad_w,grad_input,loss] = lf.LossFuntion().WW(W3,input,train_lbls)
 learning_rate = 0.01
-
-for x in range(10):
-    
-
-

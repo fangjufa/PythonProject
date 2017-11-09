@@ -23,7 +23,7 @@ class Convolution(object):
         self.input = input
         self.conv = conv
 
-    def forward(self,backgrad):
+    def forward(self):
         """Convolution operation.Output size is [x.shape[0],conv.shape[0],x.shape[2]-conv.shape[2] + 1,x.shape[3]-conv.shape[3]+1]"""
         x = self.input
         conv = self.conv
@@ -97,12 +97,12 @@ class Convolution(object):
                 #temp = np.zeros([channel,W,H])
                 for k in range(channel):
                     #[temp[k],self.grad_input[i][k],self.grad_conv[j][k]] = self.conv_simple(data[k],kernel[k])
-                    [grad_input[i][k],grad_conv[j][k]] = self.conv_simple(data[k],kernel[k],backgrad[i][j])
+                    [grad_input[i][k],grad_conv[j][k]] = self.backward_simple(data[k],kernel[k],backgrad[i][j])
                 #result[i][j] = np.sum(temp,axis = 0)
 
         return [grad_input,grad_conv]
 
-    def backward_simple(self,backgrad):
+    def backward_simple(self,x,kernel,backgrad):
         if not x.ndim == 2 or not kernel.ndim == 2:
             print("Dimension of x and kernel must be 2.")
             return False
@@ -338,20 +338,26 @@ W3 = np.multiply( W2,W2)
 dW2 = 2*W2
 dW1 = 4*dW2
 
-dW = Convolution(input,W).backward(dW1)
+[dInput, dW] = Convolution(input,W).backward(dW1)
 
-print("Numpy:",dW)
+print("Numpy dInput:",dInput)
+print("Numpy dW:",dW)
 
 
 import tensorflow as tf
-tfInput = tf.Variable(input)
-tfW = tf.Variable(W)
-tfW = tf.reshape(tfW,shape = [1,4,4,1])
-tfRe = tf.nn.conv2d(tfW,[1,2,2,1],[1,2,2,1],padding="VALID")
+tfInput = tf.Variable(tf.truncated_normal(shape=[1,1,4,4]))
+tfInput = tf.reshape(tfInput,shape=[1,4,4,1])
+tfW = tf.Variable(W,tf.float32)
+tfW = tf.reshape(tfW,shape = [2,2,1,1])
+
+#莫名其妙的错误。
+tfRe = tf.nn.conv2d(tfInput,tfW,[1,2,2,1],padding="VALID")
+#tf.nn.max_pool
 tfResult = (tfRe*4)**2
 
-grad = tf.gradients(tfResult,tfW)
+grad_W = tf.gradients(tfResult,tfW)
+grad_In = tf.gradients(tfResult,tfInput)
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    g_re = sess.run(grad)
+    g_W,g_In = sess.run(grad_W,grad_In)
     print("Tensorflow:",g_re)

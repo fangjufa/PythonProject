@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>bb3e65e5-2f69-4722-a867-3f7c44448cdd</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PythonProject.py</StartupFile>
+    <StartupFile>TensorFlowCifar.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -66,7 +66,7 @@
     <Compile Include="softmax_regression.py" />
     <Compile Include="tensorboard_test.py" />
     <Compile Include="tensorflow learning.py" />
-    <Compile Include="TensorFlowLearn.py" />
+    <Compile Include="TensorFlowCifar.py" />
     <Compile Include="tensorflow_matplot_maxpooling.py" />
     <Compile Include="tensorflow_opencv.py" />
     <Compile Include="TestAnimation.py" />
