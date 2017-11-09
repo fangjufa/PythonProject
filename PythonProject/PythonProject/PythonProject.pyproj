@@ -26,6 +26,9 @@
     <Compile Include="CIFAR_test.py" />
     <Compile Include="ConvolutionalNetwork.py" />
     <Compile Include="convolution_test.py" />
+    <Compile Include="ModelTestCifar.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="read_images.py" />
     <Compile Include="exponential_test.py" />
     <Compile Include="get_minimize_point.py" />
