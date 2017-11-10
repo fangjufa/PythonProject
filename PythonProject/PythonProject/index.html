@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>test it</title>
+    <script type="text/javascript">
+        function test()
+        {
+            console.debug("aaa");
+            var text = document.getElementById("text").value;
+            var pwd = document.getElementById("pwd").value;
+            var lbl = document.getElementById("lbl");
+            lbl.innerText = "Text:" + text + ";Password:" + pwd;
+        }
+    </script>
+</head>
+<body>
+    <input id="text" type="text" value="please input"/>
+    <input id="pwd" type="password" value="" />
+    <input type="button" value="Submit" onclick="test()"/>
+    <label id="lbl"></label>
+</body>
+</html>

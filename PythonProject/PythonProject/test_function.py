@@ -378,9 +378,25 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 #    #result = sess.run(re,feed_dict={input:inp})
 #    #print(result)
 #    print(sess.run(add,feed_dict={input:inp}))
+'''测试字符串拼接'''
+#a = 1
+#b = "hello"
+#print("hello %a"%a)#这里其实%s、%d、%f、%c都可以。只是不同的字符对应不同的输出，分别对应str,double,float,character.
+#print(b+" World")
+#print(b+ (str)(a))
+'''end'''
 
-a = 1
-b = "hello"
-print("hello %a"%a)#这里其实%s、%d、%f、%c都可以。只是不同的字符对应不同的输出，分别对应str,double,float,character.
-print(b+" World")
-print(b+ (str)(a))
+import tensorflow as tf
+def Bias_Initial(shape):
+    bias = tf.constant(0.1,shape=shape)
+    return tf.Variable(bias)
+
+b = Bias_Initial(shape=[5,4])
+
+#0是列，1是行。即axis=1时，一行的所有元素相加，得到一个数。对应的列也是一样。
+c = tf.reduce_sum(b,axis=1)
+
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    print(sess.run(b))
+    print(sess.run(c))
