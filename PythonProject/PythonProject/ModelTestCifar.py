@@ -1,7 +1,8 @@
-import sys
+﻿import sys
 #sys.path.append('D:/PythonPackages/models-master/research/slim/nets')
 sys.path.append('E:/models-master/research/slim/nets')
 import inception_v4 as incept
+import read_images as ri
 import tensorflow as tf
 from tensorflow.contrib.learn.python.learn.datasets import base
 import read_images as ri
