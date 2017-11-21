@@ -26,6 +26,9 @@
     <Compile Include="CIFAR_test.py" />
     <Compile Include="ConvolutionalNetwork.py" />
     <Compile Include="convolution_test.py" />
+    <Compile Include="LSTMTest.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ModelTestCifar.py">
       <SubType>Code</SubType>
     </Compile>
@@ -79,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MatplotFigures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="index.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
