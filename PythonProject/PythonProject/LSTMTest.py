@@ -31,7 +31,7 @@ def lossFun(inputs, targets, hprev):
   hprev is Hx1 array of initial hidden state
   returns the loss, gradients on model parameters, and last hidden state
   """
-  xs, hs, ys, ps = {}, {}, {}, {}
+  xs, hs, ys, ps = {}, {}, {}, {}#what is xs,hs,ys,ps
   hs[-1] = np.copy(hprev)
   loss = 0
   # forward pass
@@ -41,7 +41,7 @@ def lossFun(inputs, targets, hprev):
     hs[t] = np.tanh(np.dot(Wxh, xs[t]) + np.dot(Whh, hs[t-1]) + bh) # hidden state
     ys[t] = np.dot(Why, hs[t]) + by # unnormalized log probabilities for next chars
     ps[t] = np.exp(ys[t]) / np.sum(np.exp(ys[t])) # probabilities for next chars
-    loss += -np.log(ps[t][targets[t],0]) # softmax (cross-entropy loss)
+    loss += -np.log(ps[t][targets[t],0]) # softmax (cross-entropy loss) isn't it -np.log(max(ps[t]))*ps[t][targets[t],0]
   # backward pass: compute gradients going backwards
   dWxh, dWhh, dWhy = np.zeros_like(Wxh), np.zeros_like(Whh), np.zeros_like(Why)
   dbh, dby = np.zeros_like(bh), np.zeros_like(by)
